@@ -15,9 +15,8 @@ class _ForGotPasswordState extends State<ForGotPassword> {
   forGotPassword(String email) async {
     if (email == "") {
       return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: Colors.orange,
-        content: Text("Please enter your email!!!"),
-      ));
+          backgroundColor: Colors.orange,
+          content: Text("Please enter your email!!!")));
     } else {
       FirebaseAuth.instance.sendPasswordResetEmail(email: email);
     }

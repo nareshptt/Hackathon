@@ -1,9 +1,8 @@
-import 'package:farmconnect/Pages/home.dart';
 import 'package:farmconnect/Pages/login.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'bottomNavigation.dart';
 
 class CheckUser extends StatefulWidget {
   const CheckUser({super.key});
@@ -23,7 +22,7 @@ class _CheckUserState extends State<CheckUser> {
     if (user == null) {
       return loginPage();
     } else {
-      return homePage();
+      return BottumNavigation();
     }
   }
 }

@@ -1,8 +1,9 @@
 import 'package:farmconnect/Pages/UIHelper.dart';
-import 'package:farmconnect/Pages/home.dart';
 import 'package:farmconnect/Pages/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'bottomNavigation.dart';
 
 class signupPage extends StatefulWidget {
   const signupPage({super.key});
@@ -28,8 +29,8 @@ class _signupPageState extends State<signupPage> {
         userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password)
             .then((value) {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => homePage()));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => BottumNavigation()));
         });
       } on FirebaseAuthException catch (ex) {
         return UIHelper.customAlert(context, ex.code.toString());
@@ -73,9 +74,12 @@ class _signupPageState extends State<signupPage> {
               }).toList(),
               onChanged: (String? newValue) {
                 // Handle the selected value
-                if (newValue != null) {
+                if (newValue == null) {
                   // You can store this value in a variable or use it as needed
-                  print('Selected role: $newValue');
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: Colors.orange,
+                    content: Text("Please Select Your role"),
+                  ));
                 }
               },
             ),
