@@ -13,10 +13,16 @@ class signupPage extends StatefulWidget {
 }
 
 class _signupPageState extends State<signupPage> {
+  final TextEditingController _searchController = TextEditingController();
+  List<String> _searchResults = [];
+
   TextEditingController emailControler = TextEditingController();
   TextEditingController passwordControler = TextEditingController();
 
-  signUP(String email, String password) async {
+  signUP(
+    String email,
+    String password,
+  ) async {
     if (email == "" || password == "") {
       return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.orange,
@@ -90,8 +96,10 @@ class _signupPageState extends State<signupPage> {
             height: 20,
           ),
           UIHelper.CustomButton(() {
-            signUP(emailControler.text.toString(),
-                passwordControler.text.toString());
+            signUP(
+              emailControler.text.toString(),
+              passwordControler.text.toString(),
+            );
           }, "Signup"),
           SizedBox(
             height: 40,
