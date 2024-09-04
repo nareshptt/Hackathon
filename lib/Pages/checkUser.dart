@@ -18,7 +18,7 @@ class _CheckUserState extends State<CheckUser> {
   }
 
   checkUser() {
-    final user = FirebaseAuth.instance.currentUser;
+    User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       return loginPage();
     } else {

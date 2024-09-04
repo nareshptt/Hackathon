@@ -47,76 +47,85 @@ class _signupPageState extends State<signupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Create account",
-            style: TextStyle(
-                fontSize: 30, color: Colors.blue, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          UIHelper.CustomTextfield(emailControler, "Email", Icons.email, false),
-          Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(25)),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-            child: DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.person),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                filled: true,
-                fillColor: Colors.grey[200],
-              ),
-              hint: Text('Select Role'),
-              items: <String>['Buyer', 'Farmer'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                // Handle the selected value
-                if (newValue == null) {
-                  // You can store this value in a variable or use it as needed
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: Colors.orange,
-                    content: Text("Please Select Your role"),
-                  ));
-                }
-              },
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 150,
             ),
-          ),
-          UIHelper.CustomTextfield(
-              passwordControler, "Password", Icons.lock, true),
-          SizedBox(
-            height: 20,
-          ),
-          UIHelper.CustomButton(() {
-            signUP(
-              emailControler.text.toString(),
-              passwordControler.text.toString(),
-            );
-          }, "Signup"),
-          SizedBox(
-            height: 40,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Already have an account?"),
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => loginPage()));
-                  },
-                  child: Text("Login here")),
-            ],
-          )
-        ],
+            Text(
+              "Create account",
+              style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            UIHelper.CustomTextfield(
+                emailControler, "Email", Icons.email, false),
+            Container(
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(25)),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              child: DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.person),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                ),
+                hint: Text('Select Role'),
+                items: <String>['Buyer', 'Farmer'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  // Handle the selected value
+                  if (newValue == null) {
+                    // You can store this value in a variable or use it as needed
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      backgroundColor: Colors.orange,
+                      content: Text("Please Select Your role"),
+                    ));
+                  }
+                },
+              ),
+            ),
+            UIHelper.CustomTextfield(
+                passwordControler, "Password", Icons.lock, true),
+            SizedBox(
+              height: 20,
+            ),
+            UIHelper.CustomButton(() {
+              signUP(
+                emailControler.text.toString(),
+                passwordControler.text.toString(),
+              );
+            }, "Signup"),
+            SizedBox(
+              height: 40,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Already have an account?"),
+                TextButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => loginPage()));
+                    },
+                    child: Text("Login here")),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -10,15 +10,25 @@ class ForGotPassword extends StatefulWidget {
 }
 
 class _ForGotPasswordState extends State<ForGotPassword> {
-  TextEditingController emailControler = TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
-  forGotPassword(String email) async {
-    if (email == "") {
-      return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  forgotPassword(String email) async {
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.orange,
           content: Text("Please enter your email!!!")));
     } else {
-      FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      try {
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.green,
+            content: Text("Password reset email sent successfully!")));
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content:
+                Text("Failed to send password reset email: ${e.toString()}")));
+      }
     }
   }
 
@@ -28,18 +38,23 @@ class _ForGotPasswordState extends State<ForGotPassword> {
       appBar: AppBar(
         title: Text("Forgot Password"),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          UIHelper.CustomTextfield(
-              emailControler, "Enter Email ", Icons.email, false),
-          SizedBox(
-            height: 20,
-          ),
-          UIHelper.CustomButton(() {
-            forGotPassword(emailControler.text.toString());
-          }, "Reset"),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 200,
+            ),
+            UIHelper.CustomTextfield(
+                emailController, "Enter Email ", Icons.email, false),
+            SizedBox(
+              height: 20,
+            ),
+            UIHelper.CustomButton(() {
+              forgotPassword(emailController.text.toString());
+            }, "Reset"),
+          ],
+        ),
       ),
     );
   }

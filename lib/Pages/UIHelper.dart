@@ -22,6 +22,7 @@ class UIHelper {
       height: 50,
       width: 200,
       child: ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
           onPressed: () {
             voidCallback();
           },

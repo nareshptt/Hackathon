@@ -43,49 +43,68 @@ class _loginPageState extends State<loginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Welcome back ",
-            style: TextStyle(
-                fontSize: 30, color: Colors.blue, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          UIHelper.CustomTextfield(emailControler, "Email", Icons.email, false),
-          UIHelper.CustomTextfield(
-              passwordControler, "Password", Icons.lock, true),
-          SizedBox(
-            height: 20,
-          ),
-          UIHelper.CustomButton(() {
-            logIn(emailControler.text.toString(),
-                passwordControler.text.toString());
-          }, "Login"),
-          SizedBox(
-            height: 40,
-          ),
-          TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ForGotPassword()));
-              },
-              child: Text("Forgot Password ?")),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Don't have an account?"),
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => signupPage()));
-                  },
-                  child: Text("Sigup here")),
-            ],
-          )
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 150,
+                  ),
+                  Text(
+                    "Welcome back ",
+                    style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  UIHelper.CustomTextfield(
+                      emailControler, "Email", Icons.email, false),
+                  UIHelper.CustomTextfield(
+                      passwordControler, "Password", Icons.lock, true),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  UIHelper.CustomButton(() {
+                    logIn(emailControler.text.toString(),
+                        passwordControler.text.toString());
+                  }, "Login"),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ForGotPassword()));
+                      },
+                      child: Text("Forgot Password ?")),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Don't have an account?"),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => signupPage()));
+                          },
+                          child: Text("Sigup here")),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -3,7 +3,6 @@ import 'package:farmconnect/Pages/categories.dart';
 import 'package:farmconnect/Pages/profile.dart';
 import 'package:flutter/material.dart';
 
-import 'cart.dart';
 import 'home.dart';
 
 class BottumNavigation extends StatefulWidget {
@@ -17,22 +16,22 @@ class _BottumNavigationState extends State<BottumNavigation> {
   int currentIndex = 0;
 
   late List<Widget> pages;
-  late homePage homepage;
+  late HomePage homepage;
   late Categories categories;
-  late Cart cart;
+
   late Profile profile;
 
   late Widget currentPage;
 
   @override
   void initState() {
-    homepage = homePage();
+    homepage = HomePage();
     categories = Categories();
-    cart = Cart();
+
     profile = Profile();
 
-    pages = [homePage(), Categories(), Cart(), Profile()];
-    currentPage = homePage();
+    pages = [HomePage(), Categories(), Profile()];
+    currentPage = HomePage();
     super.initState();
   }
 
@@ -57,10 +56,6 @@ class _BottumNavigationState extends State<BottumNavigation> {
             ),
             Icon(
               Icons.category,
-              color: Colors.white,
-            ),
-            Icon(
-              Icons.shopping_cart_outlined,
               color: Colors.white,
             ),
             Icon(

@@ -2,40 +2,38 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:random_string/random_string.dart';
 
-import '../Pages/bottomNavigation.dart';
 import 'database.dart';
 
-class AddProductPage extends StatefulWidget {
-  const AddProductPage({super.key});
+class Editfarmerprofile extends StatefulWidget {
+  const Editfarmerprofile({super.key});
 
   @override
-  State<AddProductPage> createState() => _AddProductPageState();
+  State<Editfarmerprofile> createState() => _EditfarmerprofileState();
 }
 
-class _AddProductPageState extends State<AddProductPage> {
+class _EditfarmerprofileState extends State<Editfarmerprofile> {
+  final String currentUserId = FirebaseAuth.instance.currentUser?.uid ?? "";
   TextEditingController nameControler = TextEditingController();
-  TextEditingController priceController = TextEditingController();
-  TextEditingController ratingControler = TextEditingController();
+  TextEditingController phonenoControler = TextEditingController();
+  TextEditingController addControler = TextEditingController();
 
-  addData(String name, String Age, String location) async {
+  addData(String name, String phone, String add) async {
     User? user = FirebaseAuth.instance.currentUser;
-    if (name == "" || Age == "" || location == "") {
+    if (name == "" || phone == "" || add == "") {
       print(Text("Please Enter Data"));
     } else {
       String Id = randomAlphaNumeric(10);
-      Map<String, dynamic> ProductInfoMap = {
+      Map<String, dynamic> FarmerInfoMap = {
         "Name": nameControler.text,
-        "Price": priceController.text,
-        "Id": Id,
+        "Phone": phonenoControler.text,
         'userId': user != null ? user.uid : 'null',
-        "Rating": ratingControler.text
+        "Add": addControler.text
       };
 
-      await DatabaseMethos()
-          .addProductDetails(ProductInfoMap, Id)
-          .then((value) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const BottumNavigation()));
+      await DatabaseMethos().addFarmerDetails(FarmerInfoMap, Id).then((value) {
+        return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.green,
+            content: Text("Profile successfully updated!!!")));
       });
     }
   }
@@ -48,7 +46,7 @@ class _AddProductPageState extends State<AddProductPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                "Add",
+                "Edit",
                 style: TextStyle(
                     color: Colors.blue,
                     fontSize: 24,
@@ -57,7 +55,7 @@ class _AddProductPageState extends State<AddProductPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Product",
+                  "Profile",
                   style: TextStyle(
                       color: Colors.orange,
                       fontSize: 24,
@@ -92,14 +90,13 @@ class _AddProductPageState extends State<AddProductPage> {
                   child: TextFormField(
                     controller: nameControler,
                     decoration: InputDecoration(
-                        hintText: "Enter product name",
-                        border: InputBorder.none),
+                        hintText: "Enter name", border: InputBorder.none),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: Text(
-                    "Price/kg",
+                    "Phone",
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 24,
@@ -116,11 +113,11 @@ class _AddProductPageState extends State<AddProductPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextFormField(
-                    controller: priceController,
+                    controller: phonenoControler,
                     keyboardType: TextInputType.number,
-                    maxLength: 3,
+                    maxLength: 10,
                     decoration: InputDecoration(
-                      hintText: "Enter Price",
+                      hintText: "Enter Phoneno",
                       border: InputBorder.none,
                     ),
                   ),
@@ -128,7 +125,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: Text(
-                    "Quantity",
+                    "Address",
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 24,
@@ -145,11 +142,10 @@ class _AddProductPageState extends State<AddProductPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    maxLength: 1,
-                    controller: ratingControler,
+                    keyboardType: TextInputType.streetAddress,
+                    controller: addControler,
                     decoration: InputDecoration(
-                        hintText: "Add quantity", border: InputBorder.none),
+                        hintText: "Add Address", border: InputBorder.none),
                   ),
                 ),
                 SizedBox(
@@ -162,8 +158,8 @@ class _AddProductPageState extends State<AddProductPage> {
                             onPressed: () async {
                               addData(
                                   nameControler.text.toString(),
-                                  priceController.text.toString(),
-                                  ratingControler.text.toString());
+                                  phonenoControler.text.toString(),
+                                  addControler.text.toString());
                             },
                             child: Text("Add"))))
               ],
