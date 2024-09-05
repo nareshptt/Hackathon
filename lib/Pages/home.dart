@@ -1,5 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart'; // Fixed missing import
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmconnect/Pages/categories.dart';
+import 'package:farmconnect/Pages/productdetails.dart';
 import 'package:farmconnect/Pages/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class _HomePageState extends State<HomePage> {
   final String currentUserId = FirebaseAuth.instance.currentUser?.uid ?? "";
   Query productsQuery = FirebaseFirestore.instance.collection('Products');
   String searchValue = '';
+
   @override
   void initState() {
     super.initState();
@@ -58,7 +60,6 @@ class _HomePageState extends State<HomePage> {
                 Navigator.pop(context);
                 await Navigator.push(context,
                     MaterialPageRoute(builder: (context) => Categories()));
-                // Add navigation to categories page
               },
             ),
             ListTile(
@@ -75,7 +76,6 @@ class _HomePageState extends State<HomePage> {
               title: Text('Help'),
               onTap: () {
                 Navigator.pop(context);
-                // Add navigation to help page
               },
             ),
             ListTile(
@@ -83,7 +83,6 @@ class _HomePageState extends State<HomePage> {
               title: Text('Feedback'),
               onTap: () {
                 Navigator.pop(context);
-                // Add navigation to feedback page
               },
             ),
           ],
@@ -102,7 +101,8 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         productsQuery = FirebaseFirestore.instance
                             .collection('Products')
-                            .where('Name', isEqualTo: searchValue);
+                            .where("userId", isEqualTo: currentUserId)
+                            .where('Price', isEqualTo: searchValue);
                       });
                     },
                     child: Icon(Icons.search)),
@@ -113,23 +113,21 @@ class _HomePageState extends State<HomePage> {
                 filled: true,
                 fillColor: Colors.white,
               ),
+              onChanged: (value) {
+                searchValue = value;
+              },
               onSubmitted: (value) {
-                if (value.isEmpty) {
-                  searchValue == value;
-                }
                 // Update the stream for search
                 setState(() {
                   productsQuery = FirebaseFirestore.instance
                       .collection('Products')
-                      .where('userId', isEqualTo: currentUserId)
-                      .where('Name', isGreaterThanOrEqualTo: value)
-                      .where('Name', isLessThan: value + 'z');
+                      .where("userId", isEqualTo: currentUserId)
+                      .where('Price', isEqualTo: value);
                 });
               },
             ),
           ),
           Expanded(
-            // Wrap ListView with Expanded
             child: StreamBuilder<QuerySnapshot>(
               stream: productsQuery.snapshots(),
               builder: (context, snapshot) {
@@ -148,77 +146,90 @@ class _HomePageState extends State<HomePage> {
                       Map<String, dynamic> data =
                           document.data() as Map<String, dynamic>;
 
-                      return Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.3),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: Offset(0, 3),
+                      return GestureDetector(
+                        onTap: () {
+                          // Navigate to ProductDetails screen with data
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetails(
+                                productId: document.id,
+                              ),
                             ),
-                          ],
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(data['image'] ??
-                                      'https://via.placeholder.com/100'),
+                          );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 15),
+                          padding: EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.3),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(data['image'] ??
+                                        'https://via.placeholder.com/100'),
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(width: 15),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    data['Name'] ?? 'Product Name',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    '\$${data['Price'] ?? '0.00'}',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.production_quantity_limits,
-                                          color: Colors.amber, size: 20),
-                                      SizedBox(width: 5),
-                                      Text(
-                                        '${data['Rating'] ?? '0.0'}',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                              SizedBox(width: 15),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      data['Name'] ?? 'Product Name',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    ],
-                                  ),
-                                ],
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      '\$${data['Price'] ?? '0.00'}',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.production_quantity_limits,
+                                            color: Colors.amber, size: 20),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          '${data['Rating'] ?? '0'} ',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     }).toList(),
