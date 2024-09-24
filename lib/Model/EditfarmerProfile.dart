@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:random_string/random_string.dart';
-
 import 'database.dart';
 
 class Editfarmerprofile extends StatefulWidget {

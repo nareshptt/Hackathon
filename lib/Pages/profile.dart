@@ -25,7 +25,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.blue,
         onPressed: () async {
           await Navigator.push(context,
               MaterialPageRoute(builder: (context) => AddProductPage()));
